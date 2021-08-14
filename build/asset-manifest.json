@@ -1,0 +1,21 @@
+{
+  "files": {
+    "main.css": "./static/css/main.c21a3698.chunk.css",
+    "main.js": "./static/js/main.337f8c37.chunk.js",
+    "main.js.map": "./static/js/main.337f8c37.chunk.js.map",
+    "runtime-main.js": "./static/js/runtime-main.e104b919.js",
+    "runtime-main.js.map": "./static/js/runtime-main.e104b919.js.map",
+    "static/js/2.6dd0bc6d.chunk.js": "./static/js/2.6dd0bc6d.chunk.js",
+    "static/js/2.6dd0bc6d.chunk.js.map": "./static/js/2.6dd0bc6d.chunk.js.map",
+    "index.html": "./index.html",
+    "static/css/main.c21a3698.chunk.css.map": "./static/css/main.c21a3698.chunk.css.map",
+    "static/js/2.6dd0bc6d.chunk.js.LICENSE.txt": "./static/js/2.6dd0bc6d.chunk.js.LICENSE.txt",
+    "static/media/index.css": "./static/media/wild-sea.0b3013be.png"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.e104b919.js",
+    "static/js/2.6dd0bc6d.chunk.js",
+    "static/css/main.c21a3698.chunk.css",
+    "static/js/main.337f8c37.chunk.js"
+  ]
+}
