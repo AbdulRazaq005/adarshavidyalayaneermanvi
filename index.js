@@ -5,6 +5,7 @@ import connectDB, { User, Test, Feedback } from "./config/mongodb.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import path from "path";
+import bcrypt from "bcrypt";
 
 const app = express();
 const __dirname = path.resolve();
@@ -28,11 +29,15 @@ const upload = multer({
   storage: storage,
 });
 
-// var h = 1;
+async function hash(password) {
+  var hashedPassword = await bcrypt.hash(password, process.env.SALT);
+  return hashedPassword;
+}
+
 // app.get("/", (req, res) => {
 //   res.sendFile(__dirname + "/build/index.html");
 // });
-// var c = 1;
+
 app.get("/api/loginstatus", (req, res) => {
   //   console.log("auth:", c++);
   if (req.cookies.token) {
@@ -68,7 +73,7 @@ app.post("/api/enter", (req, res) => {
   userdata.save((err, data) => {
     if (err) {
       //   console.log(err);
-      res.status(400).send(400);
+      res.status(400).send();
     } else {
       //   console.log("Inserting Successful.......", req.body);
       res.status(200).send();
@@ -78,12 +83,22 @@ app.post("/api/enter", (req, res) => {
 
 //......Update Profile (Register)......
 app.post("/api/register", upload.single("profile"), async (req, res) => {
-  User.replaceOne({ id: req.body.id }, req.body, (err, data) => {
-    if (data.nModified === 0) {
-      res.status(400).send(`User not found with id : ${req.body.id}`);
-    } else {
-      res.status(200).send("Registration Successful");
-    }
+  bcrypt.hash(req.body.password, 5, (err, hash) => {
+    var Body = req.body;
+    Body.password = hash;
+    console.log(Body);
+    User.findOneAndUpdate({ id: req.body.id }, Body, (err, data) => {
+      if (data) {
+        if (data.nModified === 0) {
+          res.status(400).send(`User not found with id : ${req.body.id}`);
+        } else {
+          res.status(200).send("Registration Successful");
+        }
+      }
+      {
+        res.status(400).send(`User not found with id : ${req.body.id}`);
+      }
+    });
   });
 });
 
@@ -91,30 +106,32 @@ app.post("/api/login", (req, res) => {
   User.findOne({ id: req.body.id }, (err, data) => {
     // console.log("data:", data);
     // console.log("body:", req.body);
-    if (err || !data) {
-      res.status(404).send("User Id not Found!");
-    } else if (data.password != req.body.password) {
-      res.status(404).send("Password Incorrect!");
-    } else {
-      var token = jwt.sign(
-        {
+    bcrypt.compare(req.body.password, data.password, function (err, result) {
+      if (err || !data) {
+        res.status(404).send("User Id not Found!");
+      } else if (result !== true) {
+        res.status(404).send("Password Incorrect!");
+      } else {
+        var token = jwt.sign(
+          {
+            id: data.id,
+            name: data.name,
+            role: data.role,
+            subject: data.subject,
+          },
+          process.env.JWT_KEY,
+          { expiresIn: "15d" }
+        );
+        //   console.log(token);
+        res.cookie("token", `${token}`, { httpOnly: true });
+        res.status(200).send({
           id: data.id,
           name: data.name,
           role: data.role,
           subject: data.subject,
-        },
-        process.env.JWT_KEY,
-        { expiresIn: "15d" }
-      );
-      //   console.log(token);
-      res.cookie("token", `${token}`, { httpOnly: true });
-      res.status(200).send({
-        id: data.id,
-        name: data.name,
-        role: data.role,
-        subject: data.subject,
-      });
-    }
+        });
+      }
+    });
   });
 });
 
