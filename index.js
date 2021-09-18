@@ -29,9 +29,9 @@ const upload = multer({
 });
 
 // var h = 1;
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/build/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/build/index.html");
+// });
 // var c = 1;
 app.get("/api/loginstatus", (req, res) => {
   //   console.log("auth:", c++);
@@ -89,6 +89,8 @@ app.post("/api/register", upload.single("profile"), async (req, res) => {
 
 app.post("/api/login", (req, res) => {
   User.findOne({ id: req.body.id }, (err, data) => {
+    // console.log("data:", data);
+    // console.log("body:", req.body);
     if (err || !data) {
       res.status(404).send("User Id not Found!");
     } else if (data.password != req.body.password) {
@@ -201,16 +203,16 @@ app.get("/api/feedbacks", (req, res) => {
   });
 });
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("build"));
-  app.get("/", (req, res) => {
-    res.sendFile(__dirname + "/build/index.html");
-  });
-  //   console.log("Production");
-  app.get("*", (req, res) => {
-    res.redirect("/");
-  });
-}
+// if (process.env.NODE_ENV === "production") {
+app.use(express.static("build"));
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/build/index.html");
+});
+//   console.log("Production");
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
+// }
 
 const PORT = process.env.PORT || 5000;
 app.listen(
