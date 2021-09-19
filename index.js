@@ -123,8 +123,7 @@ app.post("/api/login", (req, res) => {
           { expiresIn: "15d" }
         );
         //   console.log(token);
-        res.cookie("token", `${token}`, { httpOnly: true });
-        res.status(200).send({
+        res.status(200).cookie("token", `${token}`, { httpOnly: true }).send({
           id: data.id,
           name: data.name,
           role: data.role,
