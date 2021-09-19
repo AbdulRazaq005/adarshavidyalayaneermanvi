@@ -94,8 +94,7 @@ app.post("/api/register", upload.single("profile"), async (req, res) => {
         } else {
           res.status(200).send("Registration Successful");
         }
-      }
-      {
+      } else {
         res.status(400).send(`User not found with id : ${req.body.id}`);
       }
     });
