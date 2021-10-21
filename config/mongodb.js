@@ -82,3 +82,18 @@ var feedbackSchema = new mongoose.Schema({
 });
 const Feedback = mongoose.model("feedback", feedbackSchema);
 export { Feedback };
+
+var gallerySchema = new mongoose.Schema({
+  src: String,
+});
+const Gallery = mongoose.model("gallery", gallerySchema);
+export { Gallery };
+
+// const mainmenu = new Gallery({ src: "testing" });
+// mainmenu.save((err, data) => {
+//   if (err) {
+//     console.log("Error inserting Menu...");
+//   } else {
+//     console.log("Menu inserted : ", data);
+//   }
+// });

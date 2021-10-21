@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import multer from "multer";
-import connectDB, { User, Test, Feedback } from "./config/mongodb.js";
+import connectDB, { User, Test, Feedback, Gallery } from "./config/mongodb.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -61,9 +61,15 @@ app.get("/api/loginstatus", (req, res) => {
 });
 
 app.get("/api/students", (req, res) => {
-  User.find({}, (err, data) => {
-    // console.log(data);
-    res.status(200).send(data);
+  var data = {};
+  User.find({}, (err, data1) => {
+    data.members = data1;
+    // res.status(200).send(data);
+    Gallery.find({}, (err, data2) => {
+      data.gallery = data2;
+      //   console.log(data2);
+      res.status(200).send(data);
+    });
   });
 });
 
@@ -230,7 +236,4 @@ app.get("*", (req, res) => {
 // }
 
 const PORT = process.env.PORT || 5000;
-app.listen(
-  PORT
-  // console.log(`Backend Server is up on PORT ${PORT}...`)
-);
+app.listen(PORT, () => console.log(`Backend Server is up on PORT ${PORT}...`));
