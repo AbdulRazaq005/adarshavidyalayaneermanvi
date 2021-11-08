@@ -15,7 +15,7 @@ const app = express();
 const __dirname = path.resolve();
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "build")));
 app.use(cookieParser());
 dotenv.config();
 connectDB();
@@ -221,14 +221,13 @@ app.get("/api/feedbacks", (req, res) => {
 });
 
 // if (process.env.NODE_ENV === "production") {
-app.use(express.static("build"));
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/build/index.html");
-});
-//   console.log("Production");
-app.get("*", (req, res) => {
-  res.redirect("/");
-});
+// app.use(express.static("build"));
+// app.get("/", (req, res) => {
+//   res.sendFile(__dirname + "/build/index.html");
+// });
+// app.get("*", (req, res) => {
+//   res.redirect("/");
+// });
 // }
 
 const PORT = process.env.PORT || 5000;
