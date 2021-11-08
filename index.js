@@ -222,12 +222,12 @@ app.get("/api/feedbacks", (req, res) => {
 
 // if (process.env.NODE_ENV === "production") {
 // app.use(express.static("build"));
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/build/index.html");
-// });
-// app.get("*", (req, res) => {
-//   res.redirect("/");
-// });
+app.get("/", (req, res) => {
+  res.sendFile(__dirname + "/build/index.html");
+});
+app.get("*", (req, res) => {
+  res.redirect("/");
+});
 // }
 
 const PORT = process.env.PORT || 5000;
