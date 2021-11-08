@@ -50,7 +50,7 @@ var userSchema = new mongoose.Schema({
   },
   profileURL: {
     type: String,
-    required: true,
+    // required: true,
   },
   role: {
     type: String,
