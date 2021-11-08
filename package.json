@@ -1,5 +1,6 @@
 {
   "name": "server",
+  "homepage": "https://adarshavidyalayaneermanvi.vercel.app/build/",
   "version": "1.0.0",
   "description": "Backend for Adarsh Portal Neermanvi",
   "main": "index.js",
