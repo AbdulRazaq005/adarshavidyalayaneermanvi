@@ -1,6 +1,10 @@
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
 import express from "express";
 import dotenv from "dotenv";
 import multer from "multer";
+const cloudinary = require("cloudinary").v2;
+const { CloudinaryStorage } = require("multer-storage-cloudinary");
 import connectDB, { User, Test, Feedback, Gallery } from "./config/mongodb.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
@@ -9,51 +13,40 @@ import bcrypt from "bcrypt";
 
 const app = express();
 const __dirname = path.resolve();
-app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(express.static("public"));
 app.use(cookieParser());
 dotenv.config();
 connectDB();
 
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "./public/images");
-  },
-  filename: (req, file, cb) => {
-    return cb(null, file.originalname);
+cloudinary.config({
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key: process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+});
+// console.log(process.env.CLOUDINARY_API_SECRET);
+const storage = new CloudinaryStorage({
+  cloudinary: cloudinary,
+  params: {
+    folder: "PROFILES",
   },
 });
-
-const upload = multer({
-  storage: storage,
-});
-
-async function hash(password) {
-  var hashedPassword = await bcrypt.hash(password, process.env.SALT);
-  return hashedPassword;
-}
-
-// app.get("/", (req, res) => {
-//   res.sendFile(__dirname + "/build/index.html");
-// });
+const upload = multer({ storage: storage });
 
 app.get("/api/loginstatus", (req, res) => {
-  //   console.log("auth:", c++);
   if (req.cookies.token) {
-    // console.log("got:", req.cookies.token);
     jwt.verify(req.cookies.token, process.env.JWT_KEY, function (err, decoded) {
       if (err) {
-        // console.log(err);
         res.status(404).send({ logedIn: false });
       } else {
-        // console.log(decoded);
         res.status(200).send({
           logedIn: true,
           id: decoded.id,
           role: decoded.role,
           name: decoded.name,
           subject: decoded.subject,
+          profileURL: decoded.profileURL,
         });
       }
     });
@@ -92,8 +85,9 @@ app.post("/api/register", upload.single("profile"), async (req, res) => {
   bcrypt.hash(req.body.password, 5, (err, hash) => {
     var Body = req.body;
     Body.password = hash;
-    console.log(Body);
-    User.findOneAndUpdate({ id: req.body.id }, Body, (err, data) => {
+    Body.profileURL = req.file.path;
+    console.log("poat req : ", req.file.path);
+    return User.findOneAndUpdate({ id: req.body.id }, Body, (err, data) => {
       if (data) {
         if (data.nModified === 0) {
           res.status(400).send(`User not found with id : ${req.body.id}`);
@@ -123,6 +117,7 @@ app.post("/api/login", (req, res) => {
             name: data.name,
             role: data.role,
             subject: data.subject,
+            profileURL: data.profileURL,
           },
           process.env.JWT_KEY,
           { expiresIn: "15d" }
@@ -133,6 +128,7 @@ app.post("/api/login", (req, res) => {
           name: data.name,
           role: data.role,
           subject: data.subject,
+          profileURL: data.profileURL,
         });
       }
     });
