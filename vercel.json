@@ -5,16 +5,11 @@
       "src": "./index.js",
       "use": "@vercel/node"
     }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/"
+    }
   ]
-  ,"headers": [
-        {
-            "source": "/(.*)",
-            "headers" : [
-                {
-                    "key" : "Cache-Control",
-                    "value" : "public, max-age=0, immutable"
-                }
-            ]
-        }
-    ]
 }
