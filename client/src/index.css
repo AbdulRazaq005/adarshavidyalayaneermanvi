@@ -1,0 +1,456 @@
+html {
+  /* font-size: 62.5%; */
+  font-size: 1.15em;
+}
+* {
+  margin: 0;
+  padding: 0;
+}
+input {
+  padding: 0 5px;
+  width: 30%;
+  border: 1px solid;
+  border-radius: 0.45rem;
+  text-align: center;
+}
+a {
+  text-decoration: none;
+}
+button:active {
+  outline: none;
+  box-shadow: none;
+}
+#root {
+  height: 100vh;
+  width: 100vw;
+}
+* {
+  box-sizing: border-box;
+}
+
+.flex-row {
+  display: flex;
+  flex-wrap: wrap;
+}
+.flex-col {
+  display: flex;
+  flex-direction: column;
+}
+.content-center {
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.card-image {
+  /* background-image: url("./Images/profile.jpg"); */
+  background-position: center;
+  background-size: cover;
+}
+img {
+  object-fit: cover;
+  /* overflow: hidden; */
+}
+a {
+  text-decoration: none;
+  color: #252525;
+}
+.gallery-container {
+  max-height: 100%;
+  width: 100%;
+  overflow-y: scroll;
+  display: flex;
+  justify-content: center;
+  background-color: #3d3d3d;
+  position: relative;
+}
+.gallery-img {
+  width: 15rem;
+  height: 10rem;
+  margin: 0.5rem;
+  padding: 0;
+  background-color: #363636;
+  cursor: pointer;
+}
+.gallery-img > img {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}
+.gallery-img-preview {
+  visibility: hidden;
+  z-index: 5;
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  background-color: rgba(5, 5, 5, 0.9);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.gallery-img-preview img {
+  /* max-width: 70vw; */
+  object-fit: contain;
+  width: 100%;
+  max-height: 70vh;
+  margin: 0 auto;
+}
+.close-btn {
+  position: absolute;
+  top: 1rem;
+  right: 2rem;
+  background-color: rgb(185, 0, 0);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  /* min-width: 3rem;
+  min-height: 3rem; */
+}
+.preview-nav-btn-container {
+  position: absolute;
+  bottom: 0.4rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.prev-btn {
+  background-color: rgba(73, 73, 73, 0.7);
+  border-radius: 0.7rem;
+}
+.next-btn {
+  background-color: rgba(73, 73, 73, 0.7);
+  border-radius: 0.7rem;
+}
+
+/*------------------Scrollbar Styling-------------------*/
+@media (min-width: 980px) {
+  ::-webkit-scrollbar {
+    width: 10px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background-color: #252525;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    -webkit-border-radius: 1rem;
+    border-radius: 1rem;
+    background: #6d6d6d;
+  }
+}
+/* ----------------------Containers----------------------*/
+.App {
+  background-color: rgb(117, 84, 84);
+  height: calc(100%);
+  padding-top: 5rem;
+}
+
+#nav {
+  min-height: 5rem;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 1;
+  padding: 0;
+}
+#app-container {
+  height: 100%;
+  margin: 0 auto;
+}
+
+#catagories {
+  /* background-color: rgb(243, 81, 81); */
+  /* background-color: #eba050; */
+  z-index: 100;
+  background-image: url("./wild-sea.png");
+  background-size: 4rem;
+  height: 100%;
+  width: 15%;
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+}
+#main {
+  height: 100%;
+  width: 85%;
+  /* background-color: rgb(92, 84, 73); */
+  background-image: url("./Components/bg2.png");
+  overflow-y: scroll;
+}
+
+.main-content {
+  width: 100%;
+  min-height: calc(100%-5rem);
+  margin: 0 auto;
+}
+
+#carousel {
+  display: flex;
+  width: 75%;
+  height: 27vmax;
+  /* background-image: url("//unsplash.it/800/800"); */
+  /* background-color: #333333; */
+  /* background-image: url("./Images/1.png"); */
+  background-size: contain;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+#profile {
+  height: 27vmax;
+  /* height: 100%; */
+  width: 20%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-evenly;
+  background-color: #333333;
+  /* border: 1px solid #465161; */
+  color: aliceblue;
+}
+
+/* ----------------------Utilities---------------------- */
+#login-btn {
+  margin-right: 1.5vw;
+}
+
+#login-btn:hover {
+  background-color: rgb(39, 39, 39);
+  color: antiquewhite;
+}
+
+#register-btn:hover {
+  background-color: rgb(255, 166, 0);
+}
+
+#neermanvi {
+  border: 0;
+  padding: 0;
+  color: rgb(153, 153, 153);
+  font-size: smaller;
+}
+
+.catagory-item {
+  margin: 0.3rem;
+  font-size: 1.1rem;
+  outline: none;
+}
+.catagory-item:hover {
+  outline: none;
+  background-color: #f1a04a;
+  /* border: black 0.1rem solid; */
+}
+.catagory-item:active {
+  outline: none;
+  background-color: #eb8d29;
+}
+
+#register-bar {
+  height: 3rem;
+  /* margin: 5px; */
+}
+
+.card-profile {
+  display: flex;
+  height: 100%;
+  flex: 1 0 20%;
+  flex-direction: column;
+  justify-content: center;
+  /* font-size: vw; */
+}
+.card-navs {
+  max-height: max-content;
+  flex: 0 1 20%;
+}
+.card-image {
+  height: 9vmax;
+  width: 9vmax;
+  margin: 3% auto;
+  border-radius: 100%;
+  background-color: rgb(255, 255, 255);
+}
+.card-btns {
+  width: 100%;
+  margin: 0.1rem 0;
+  padding: 0.3rem 0;
+  text-align: center;
+}
+
+.subject-flex {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+}
+.subject-btn {
+  margin: 0.5rem;
+  padding: 0.1rem 1rem;
+  width: 6rem;
+  text-align: center;
+  border-radius: 0.2rem;
+  font-weight: 500;
+  background: #eba050;
+  box-shadow: 0.1rem 0.1rem 0rem #b57b3e, -0.1rem -0.1rem 0rem #ffc562;
+}
+
+#result-bar {
+  min-width: 12vw;
+  height: 10px;
+  display: inline-block;
+  border: 1px solid;
+  border-radius: 5px;
+  margin: 0 0.2rem;
+  overflow: hidden;
+}
+.register {
+  background-color: white;
+  min-height: 100%;
+  padding-bottom: 30px;
+}
+.register input,
+.register textarea {
+  font-size: 0.8em;
+}
+.display-none {
+  display: none;
+}
+.close-btn {
+  color: #252525;
+  width: 2rem;
+  height: 2rem;
+  border-radius: 0.3rem;
+  line-height: 2rem;
+  text-align: center;
+  font-weight: 700;
+  cursor: pointer;
+}
+@media (max-width: 980px) and (min-width: 576px) {
+  html {
+    font-size: 85%;
+  }
+  .myReact-icons {
+    height: 5vh;
+  }
+}
+
+@media (max-width: 575px) {
+  html {
+    font-size: 80%;
+  }
+  #catagories {
+    flex-direction: row;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    height: 7rem;
+  }
+  #main {
+    width: 100%;
+    padding-bottom: 7rem;
+    background-color: rgb(255, 255, 255);
+    overflow-y: scroll;
+  }
+  .main-content {
+    width: 100%;
+    display: block;
+    margin-bottom: 7rem;
+  }
+  #carousel {
+    width: 100%;
+    height: 21vmax;
+    flex: 1 0 100%;
+    min-height: max-content;
+    background-size: cover;
+  }
+  #profile {
+    flex: 1 0 25%;
+    height: auto;
+    flex-direction: row;
+    align-items: center;
+    margin-top: 10px;
+  }
+  .card-profile {
+    flex: 0 1 50%;
+  }
+  .card-navs {
+    flex: 1 1 50%;
+  }
+  .myReact-icons {
+    height: 2em;
+  }
+  .nav-item {
+    background-color: rgb(30, 30, 30);
+    width: 100%;
+    text-align: center;
+    border: 2px solid rgb(34, 34, 34);
+  }
+  .navbar-nav {
+    width: 100%;
+    padding-bottom: 5px;
+  }
+  .close-btn {
+    min-width: 2rem;
+    min-height: 2rem;
+  }
+  .preview-nav-btn-container {
+    bottom: 5rem;
+  }
+}
+
+/* ==================================== */
+/* ==================================== */
+.btn:focus,
+.btn:active:focus,
+.btn.active:focus {
+  outline: none;
+  box-shadow: none;
+}
+.birthday-card {
+  margin: 0 auto;
+  padding: 16px;
+  width: 15rem;
+  text-align: center;
+}
+.birthday-card img {
+  width: 14rem;
+  object-fit: cover;
+  height: 14rem;
+  border-radius: 7rem;
+}
+.bday-image {
+  border-radius: 1rem;
+}
+.avatar {
+  border: 0.3rem solid rgba(#fff, 0.3);
+  height: 10rem;
+  width: 10rem;
+  margin-top: 0rem;
+  margin-bottom: 1rem;
+  max-width: 9rem;
+}
+.student-card {
+  background-color: #3f3f47;
+}
+/* new carousel */
+.panel {
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  border-radius: 0.8rem;
+  color: azure;
+  cursor: pointer;
+  flex: 1 1 0px;
+  margin: 5px;
+  position: relative;
+  transition: flex 0.7s ease-out;
+  opacity: 0.9;
+  width: 0px;
+}
+
+.panel.active {
+  flex: 20;
+  opacity: 1;
+}
+.panel.active h3 {
+  opacity: 1;
+  transition: opacity 0.3s ease-in 0.4s;
+}
