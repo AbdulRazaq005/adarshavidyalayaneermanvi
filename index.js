@@ -5,7 +5,11 @@ import dotenv from "dotenv";
 import multer from "multer";
 const cloudinary = require("cloudinary").v2;
 const { CloudinaryStorage } = require("multer-storage-cloudinary");
-import connectDB, { User, Test, Feedback, Gallery } from "./config/mongodb.js";
+import connectDB from "./config/mongodb.js";
+import User from "./models/User.js";
+import Test from "./models/Test.js";
+import Feedback from "./models/Feedback.js";
+import Gallery from "./models/Gallery.js";
 import jwt from "jsonwebtoken";
 import cookieParser from "cookie-parser";
 import path from "path";
@@ -25,7 +29,7 @@ cloudinary.config({
   api_key: process.env.CLOUDINARY_API_KEY,
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
-// console.log(process.env.CLOUDINARY_API_SECRET);
+
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary,
   params: {
@@ -60,7 +64,6 @@ app.get("/api/students", (req, res) => {
     // res.status(200).send(data);
     Gallery.find({}, (err, data2) => {
       data.gallery = data2;
-      //   console.log(data2);
       res.status(200).send(data);
     });
   });
@@ -68,8 +71,8 @@ app.get("/api/students", (req, res) => {
 
 //......Entry Profile......
 app.post("/api/enter", (req, res) => {
-  const userdata = new User(req.body);
-  userdata.save((err, data) => {
+  const userData = new User(req.body);
+  userData.save((err, data) => {
     if (err) {
       //   console.log(err);
       res.status(400).send();
@@ -86,7 +89,7 @@ app.post("/api/register", upload.single("profile"), async (req, res) => {
     var Body = req.body;
     Body.password = hash;
     Body.profileURL = req.file.path;
-    console.log("poat req : ", req.file.path);
+    // console.log("path req : ", req.file.path);
     return User.findOneAndUpdate({ id: req.body.id }, Body, (err, data) => {
       if (data) {
         if (data.nModified === 0) {
@@ -105,33 +108,37 @@ app.post("/api/login", (req, res) => {
   User.findOne({ id: req.body.id }, (err, data) => {
     // console.log("data:", data);
     // console.log("body:", req.body);
-    bcrypt.compare(req.body.password, data.password, function (err, result) {
-      if (err || !data) {
-        res.status(404).send("User Id not Found!");
-      } else if (result !== true) {
-        res.status(404).send("Password Incorrect!");
-      } else {
-        var token = jwt.sign(
-          {
+    if (data) {
+      bcrypt.compare(req.body.password, data.password, function (err, result) {
+        if (err || !data) {
+          res.status(404).send("User Id not Found!");
+        } else if (result !== true) {
+          res.status(404).send("Password Incorrect!");
+        } else {
+          var token = jwt.sign(
+            {
+              id: data.id,
+              name: data.name,
+              role: data.role,
+              subject: data.subject,
+              profileURL: data.profileURL,
+            },
+            process.env.JWT_KEY,
+            { expiresIn: "15d" }
+          );
+          //   console.log(token);
+          res.status(200).cookie("token", `${token}`, { httpOnly: true }).send({
             id: data.id,
             name: data.name,
             role: data.role,
             subject: data.subject,
             profileURL: data.profileURL,
-          },
-          process.env.JWT_KEY,
-          { expiresIn: "15d" }
-        );
-        //   console.log(token);
-        res.status(200).cookie("token", `${token}`, { httpOnly: true }).send({
-          id: data.id,
-          name: data.name,
-          role: data.role,
-          subject: data.subject,
-          profileURL: data.profileURL,
-        });
-      }
-    });
+          });
+        }
+      });
+    } else {
+      res.status(401).send("Invalid User");
+    }
   });
 });
 
@@ -140,7 +147,6 @@ app.get("/api/logout", (req, res) => {
   res.status(200).send("Logout Successful!!!");
 });
 
-// var t = 1;
 app.get("/api/tests", (req, res) => {
   Test.find({}, function (err, tests) {
     if (err) {
@@ -195,8 +201,8 @@ app.put("/api/test/:id", (req, res) => {
 });
 
 app.post("/api/feedback", (req, res) => {
-  const feedbackdata = new Feedback(req.body);
-  feedbackdata.save((err, data) => {
+  const feedbackData = new Feedback(req.body);
+  feedbackData.save((err, data) => {
     if (err) {
       //   console.log(err);
       res.status(400).send("Feedback not Sent! Please try again Later.");
@@ -207,7 +213,6 @@ app.post("/api/feedback", (req, res) => {
   });
 });
 
-// var f = 1;
 app.get("/api/feedbacks", (req, res) => {
   Feedback.find({}, function (err, feedbacks) {
     if (err) {
@@ -220,15 +225,15 @@ app.get("/api/feedbacks", (req, res) => {
   });
 });
 
-// if (process.env.NODE_ENV === "production") {
-// app.use(express.static("build"));
-app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/build/index.html");
-});
-app.get("*", (req, res) => {
-  res.redirect("/");
-});
-// }
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("build"));
+  app.get("/", (req, res) => {
+    res.sendFile(__dirname + "/build/index.html");
+  });
+  app.get("*", (req, res) => {
+    res.redirect("/");
+  });
+}
 
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Backend Server is up on PORT ${PORT}...`));
