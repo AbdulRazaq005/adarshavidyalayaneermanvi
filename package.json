@@ -1,11 +1,11 @@
 {
-  "name": "server",
+  "name": "adarsha-vidyalaya-neermanvi",
   "homepage": "https://adarshavidyalayaneermanvi.vercel.app/build/",
   "version": "1.0.0",
   "description": "Backend for Adarsh Portal Neermanvi",
   "main": "index.js",
   "engines": {
-    "node": "19.x"
+    "node": "16.x"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
